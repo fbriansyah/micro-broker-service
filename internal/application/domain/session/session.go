@@ -1,12 +1,12 @@
 package dmsession
 
-import "google.golang.org/genproto/googleapis/type/datetime"
+import "time"
 
 type Session struct {
 	Id                    string
 	UserId                string
 	AccessToken           string
 	RefreshToken          string
-	AccessTokenExpiresAt  *datetime.DateTime
-	RefreshTokenExpiresAt *datetime.DateTime
+	AccessTokenExpiresAt  time.Time
+	RefreshTokenExpiresAt time.Time
 }
