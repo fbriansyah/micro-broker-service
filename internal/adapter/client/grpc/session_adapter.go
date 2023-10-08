@@ -21,6 +21,7 @@ func NewSessionClientAdapter(conn *grpc.ClientConn) *SessionClientAdapter {
 	}
 }
 
+// GetPayloadData validate token and extract payload from token
 func (a *SessionClientAdapter) GetPayloadData(ctx context.Context, token string) (dmsession.SessionPayload, error) {
 	payload, err := a.client.GetPayloadFromToken(ctx, &session.Token{
 		AccessToken: token,
