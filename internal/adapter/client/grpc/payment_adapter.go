@@ -5,6 +5,7 @@ import (
 
 	dmbiller "github.com/fbriansyah/micro-broker-service/internal/application/domain/biller"
 	"github.com/fbriansyah/micro-broker-service/internal/port"
+	"github.com/fbriansyah/micro-broker-service/util"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/payment"
 	"google.golang.org/grpc"
 )
@@ -38,10 +39,20 @@ func (a *PaymentClientAdapter) Inquiry(ctx context.Context, params dmbiller.Inqu
 	}, nil
 }
 
-func (a *PaymentClientAdapter) Payment(ctx context.Context, params dmbiller.PaymentParam) error {
-	a.client.Payment(ctx, &payment.PaymentRequest{
+func (a *PaymentClientAdapter) Payment(ctx context.Context, params dmbiller.PaymentParam) (dmbiller.Transaction, error) {
+	response, err := a.client.Payment(ctx, &payment.PaymentRequest{
 		UserId: params.UserID,
 		InqId:  params.InquiryID,
 	})
-	return nil
+	if err != nil {
+		return dmbiller.Transaction{}, err
+	}
+	return dmbiller.Transaction{
+		BillNumber:          response.BillNumber,
+		ProductCode:         response.ProductCode,
+		Name:                response.Name,
+		TotalAmount:         response.TotalAmount,
+		RefferenceNumber:    response.RefferenceNumber,
+		TransactionDatetime: util.FromDateTime(response.TransactionDatetime),
+	}, nil
 }
