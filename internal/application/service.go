@@ -21,16 +21,16 @@ type BrokerService struct {
 }
 
 type BrokerClientConfig struct {
-	authClient    port.AuthAdapterPort
-	sessionClient port.SessionAdapterPort
-	paymentClient port.PaymentAdapterPort
+	AuthClient    port.AuthAdapterPort
+	SessionClient port.SessionAdapterPort
+	PaymentClient port.PaymentAdapterPort
 }
 
 func NewBrokerSerice(clientConfig BrokerClientConfig) *BrokerService {
 	return &BrokerService{
-		authClient:    clientConfig.authClient,
-		sessionClient: clientConfig.sessionClient,
-		paymentClient: clientConfig.paymentClient,
+		authClient:    clientConfig.AuthClient,
+		sessionClient: clientConfig.SessionClient,
+		paymentClient: clientConfig.PaymentClient,
 	}
 }
 

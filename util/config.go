@@ -8,7 +8,7 @@ import (
 // The values are read by viper from a config file or environment variable.
 type Config struct {
 	Environment          string `mapstructure:"ENVIRONMENT"`
-	GrpcPort             int    `mapstructure:"GRPC_PORT"`
+	HTTPServerAddress    string `mapstructure:"HTTP_SERVER_ADDRESS"`
 	AuthServerAddress    string `mapstructure:"AUTH_SERVER_ADDRESS"`
 	SessionServerAddress string `mapstructure:"SESSION_SERVER_ADDRESS"`
 	PaymentServerAddress string `mapstructure:"PAYMENT_SERVER_ADDRESS"`
