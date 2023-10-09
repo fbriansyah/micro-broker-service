@@ -7,6 +7,7 @@ import (
 	"github.com/fbriansyah/micro-broker-service/util"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 	}
 
 	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	authConn, err := grpc.Dial(config.AuthServerAddress, opts...)
 	if err != nil {
