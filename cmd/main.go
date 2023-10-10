@@ -33,7 +33,7 @@ func main() {
 	sessionClient := grpcclient.NewSessionClientAdapter(sessionConn)
 	defer sessionConn.Close()
 
-	paymentConn, err := grpc.Dial(config.SessionServerAddress, opts...)
+	paymentConn, err := grpc.Dial(config.PaymentServerAddress, opts...)
 	if err != nil {
 		log.Fatal().Msgf("cannot load paymentConn: %v", err.Error())
 	}

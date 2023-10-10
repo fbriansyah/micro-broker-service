@@ -19,4 +19,6 @@ type BrokerServicePort interface {
 	// Payment check token validity to session microservice.
 	// If valid, send Payment request to payment microservice.
 	Payment(ctx context.Context, amount int64, inqID, token string) (dmbiller.Transaction, error)
+	// GetPayloadData Validate and get payload from token
+	GetPayloadData(ctx context.Context, token string) (dmsession.SessionPayload, error)
 }

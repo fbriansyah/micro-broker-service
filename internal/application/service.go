@@ -59,11 +59,13 @@ func (s *BrokerService) Inquiry(ctx context.Context, billNumber, productCode, to
 		return dmbiller.Bill{}, ErrorInvalidToken
 	}
 
-	bill, err := s.paymentClient.Inquiry(ctx, dmbiller.InquiryParam{
+	arg := dmbiller.InquiryParam{
 		UserID:      payload.UserID.String(),
 		BillNumber:  billNumber,
 		ProductCode: productCode,
-	})
+	}
+
+	bill, err := s.paymentClient.Inquiry(ctx, arg)
 	if err != nil {
 		return dmbiller.Bill{}, err
 	}
@@ -87,4 +89,8 @@ func (s *BrokerService) Payment(ctx context.Context, amount int64, inqID, token 
 	}
 
 	return trx, nil
+}
+
+func (s *BrokerService) GetPayloadData(ctx context.Context, token string) (dmsession.SessionPayload, error) {
+	return s.sessionClient.GetPayloadData(ctx, token)
 }
