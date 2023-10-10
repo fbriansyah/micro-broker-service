@@ -46,12 +46,6 @@ func (adapter *ChiAdapter) Inquiry(w http.ResponseWriter, r *http.Request) {
 	}
 	token := authHeader[1]
 
-	// payload, err := adapter.brokerService.GetPayloadData(context.Background(), token)
-	// if err != nil {
-	// 	adapter.errorJSON(w, err)
-	// 	return
-	// }
-
 	var req struct {
 		BillNumber  string `json:"bill_number"`
 		ProductCode string `json:"product_code"`
@@ -76,4 +70,38 @@ func (adapter *ChiAdapter) Inquiry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	adapter.writeJSON(w, http.StatusOK, payload)
+}
+
+func (adapter *ChiAdapter) Payment(w http.ResponseWriter, r *http.Request) {
+	authHeader := strings.Split(r.Header.Get("authorization"), " ")
+	if len(authHeader) != 2 {
+		adapter.errorJSON(w, errors.New("authorization header not found"), http.StatusUnauthorized)
+		return
+	}
+	token := authHeader[1]
+
+	var req struct {
+		InquiryID string `json:"inquiry_id"`
+		Amount    int64  `json:"amount"`
+	}
+
+	err := adapter.readJSON(w, r, &req)
+	if err != nil {
+		adapter.errorJSON(w, err)
+		return
+	}
+
+	trx, err := adapter.brokerService.Payment(context.Background(), req.Amount, req.InquiryID, token)
+	if err != nil {
+		adapter.errorJSON(w, err)
+		return
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "",
+		Data:    trx,
+	}
+
+	adapter.writeJSON(w, 200, payload)
 }
