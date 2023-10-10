@@ -2,11 +2,11 @@ package grpcclient
 
 import (
 	"context"
+	"fmt"
 
 	dmsession "github.com/fbriansyah/micro-broker-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-broker-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-broker-service/internal/port"
-	"github.com/fbriansyah/micro-broker-service/util"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/auth"
 	"google.golang.org/grpc"
 )
@@ -29,17 +29,19 @@ func (a *AuthClientAdapter) Login(ctx context.Context, username, password string
 		Password: password,
 	})
 
+	fmt.Println(resp.Session)
+
 	if err != nil {
 		return dmsession.Session{}, err
 	}
 
 	return dmsession.Session{
-		Id:                    resp.Session.Id,
-		UserId:                resp.Userid,
-		AccessToken:           resp.Session.AccessToken,
-		RefreshToken:          resp.Session.RefreshToken,
-		AccessTokenExpiresAt:  util.FromDateTime(resp.Session.AccessTokenExpiresAt),
-		RefreshTokenExpiresAt: util.FromDateTime(resp.Session.RefreshTokenExpiresAt),
+		Id:           resp.Session.Id,
+		UserId:       resp.Userid,
+		AccessToken:  resp.Session.AccessToken,
+		RefreshToken: resp.Session.RefreshToken,
+		// AccessTokenExpiresAt:  util.FromDateTime(resp.Session.AccessTokenExpiresAt),
+		// RefreshTokenExpiresAt: util.FromDateTime(resp.Session.RefreshTokenExpiresAt),
 	}, nil
 }
 

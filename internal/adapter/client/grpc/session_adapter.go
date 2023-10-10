@@ -35,3 +35,20 @@ func (a *SessionClientAdapter) GetPayloadData(ctx context.Context, token string)
 		UserID: uuid.MustParse(payload.UserId),
 	}, nil
 }
+
+func (a *SessionClientAdapter) CreateSession(ctx context.Context, userID string) (dmsession.Session, error) {
+	session, err := a.client.CreateSession(ctx, &session.UserID{
+		UserId: userID,
+	})
+
+	if err != nil {
+		return dmsession.Session{}, err
+	}
+
+	return dmsession.Session{
+		Id:           session.Id,
+		UserId:       userID,
+		AccessToken:  session.AccessToken,
+		RefreshToken: session.RefreshToken,
+	}, nil
+}

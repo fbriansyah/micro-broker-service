@@ -1,4 +1,10 @@
 run:
 	go run ./cmd/main.go
 
-.PHONY: run
+down:
+	docker-compose down
+
+up:
+	docker-compose up -d
+
+.PHONY: run down up

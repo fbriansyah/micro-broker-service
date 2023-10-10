@@ -17,6 +17,7 @@ type AuthAdapterPort interface {
 // SessionAdapterPort is interface for client adapter
 type SessionAdapterPort interface {
 	GetPayloadData(ctx context.Context, token string) (dmsession.SessionPayload, error)
+	CreateSession(ctx context.Context, userID string) (dmsession.Session, error)
 }
 
 // PaymentAdapterPort is interface for client adapter
