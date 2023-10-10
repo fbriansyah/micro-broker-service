@@ -23,7 +23,7 @@ func (adapter *ChiAdapter) routes() http.Handler {
 
 	mux.Use(middleware.Heartbeat("/ping"))
 
-	mux.Post("/login", adapter.Login)
+	mux.Post("/auth/login", adapter.Login)
 
 	return mux
 }
