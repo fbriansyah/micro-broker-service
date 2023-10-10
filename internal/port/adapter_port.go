@@ -10,7 +10,7 @@ import (
 
 // AuthAdapterPort is interface for client adapter
 type AuthAdapterPort interface {
-	Login(ctx context.Context, username, password string) (dmsession.Session, error)
+	Login(ctx context.Context, username, password string) (dmuser.User, error)
 	Register(ctx context.Context, user dmuser.User, password string) (dmuser.User, error)
 }
 

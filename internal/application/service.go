@@ -34,13 +34,18 @@ func NewBrokerSerice(clientConfig BrokerClientConfig) *BrokerService {
 	}
 }
 
-func (s *BrokerService) Login(ctx context.Context, username, password string) (dmsession.Session, error) {
+func (s *BrokerService) Login(ctx context.Context, username, password string) (dmuser.User, dmsession.Session, error) {
 	usr, err := s.authClient.Login(ctx, username, password)
 	if err != nil {
-		return dmsession.Session{}, nil
+		return dmuser.User{}, dmsession.Session{}, nil
 	}
 
-	return s.sessionClient.CreateSession(ctx, usr.UserId)
+	session, err := s.sessionClient.CreateSession(ctx, usr.ID)
+	if err != nil {
+		return dmuser.User{}, dmsession.Session{}, err
+	}
+
+	return usr, session, nil
 }
 
 func (s *BrokerService) Register(ctx context.Context, user dmuser.User, password string) (dmuser.User, error) {

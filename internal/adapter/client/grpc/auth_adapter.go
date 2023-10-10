@@ -2,9 +2,7 @@ package grpcclient
 
 import (
 	"context"
-	"fmt"
 
-	dmsession "github.com/fbriansyah/micro-broker-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-broker-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-broker-service/internal/port"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/auth"
@@ -22,26 +20,21 @@ func NewAuthClientAdapter(conn *grpc.ClientConn) *AuthClientAdapter {
 	}
 }
 
-func (a *AuthClientAdapter) Login(ctx context.Context, username, password string) (dmsession.Session, error) {
+func (a *AuthClientAdapter) Login(ctx context.Context, username, password string) (dmuser.User, error) {
 
 	resp, err := a.client.Login(ctx, &auth.LoginRequest{
 		Username: username,
 		Password: password,
 	})
 
-	fmt.Println(resp.Session)
-
 	if err != nil {
-		return dmsession.Session{}, err
+		return dmuser.User{}, err
 	}
 
-	return dmsession.Session{
-		Id:           resp.Session.Id,
-		UserId:       resp.Userid,
-		AccessToken:  resp.Session.AccessToken,
-		RefreshToken: resp.Session.RefreshToken,
-		// AccessTokenExpiresAt:  util.FromDateTime(resp.Session.AccessTokenExpiresAt),
-		// RefreshTokenExpiresAt: util.FromDateTime(resp.Session.RefreshTokenExpiresAt),
+	return dmuser.User{
+		ID:       resp.Userid,
+		Username: username,
+		Name:     resp.Name,
 	}, nil
 }
 

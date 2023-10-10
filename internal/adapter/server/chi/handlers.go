@@ -18,7 +18,7 @@ func (adapter *ChiAdapter) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := adapter.brokerService.Login(context.Background(), req.Username, req.Password)
+	usr, session, err := adapter.brokerService.Login(context.Background(), req.Username, req.Password)
 
 	if err != nil {
 		adapter.errorJSON(w, err)
@@ -28,7 +28,10 @@ func (adapter *ChiAdapter) Login(w http.ResponseWriter, r *http.Request) {
 	payload := jsonResponse{
 		Error:   false,
 		Message: "",
-		Data:    session,
+		Data: map[string]any{
+			"user":    usr,
+			"session": session,
+		},
 	}
 
 	adapter.writeJSON(w, http.StatusOK, payload)
