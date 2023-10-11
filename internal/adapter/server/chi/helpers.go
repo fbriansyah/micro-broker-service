@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strings"
 )
 
 type jsonResponse struct {
@@ -70,4 +71,19 @@ func (adapter *ChiAdapter) errorJSON(w http.ResponseWriter, err error, status ..
 	payload.Message = err.Error()
 
 	return adapter.writeJSON(w, statusCode, payload)
+}
+
+type ErrorCode struct {
+	Code    string
+	Message string
+}
+
+func SplitGrpcError(err string) ErrorCode {
+	arrErr := strings.Split(err, "desc = ")
+	arrCode := strings.Split(arrErr[0], "code = ")
+
+	return ErrorCode{
+		Code:    arrCode[1],
+		Message: arrErr[1],
+	}
 }
