@@ -10,4 +10,7 @@ up:
 build-image:
 	docker build -t efner/broker-microservice:1.0 .
 
-.PHONY: run down up
+deploy: build-image
+	docker push efner/broker-microservice:1.0
+
+.PHONY: run down up deploy
