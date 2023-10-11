@@ -5,6 +5,7 @@ import (
 
 	dmsession "github.com/fbriansyah/micro-broker-service/internal/application/domain/session"
 	"github.com/fbriansyah/micro-broker-service/internal/port"
+	"github.com/fbriansyah/micro-broker-service/util"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/session"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
@@ -46,9 +47,11 @@ func (a *SessionClientAdapter) CreateSession(ctx context.Context, userID string)
 	}
 
 	return dmsession.Session{
-		Id:           session.Id,
-		UserId:       userID,
-		AccessToken:  session.AccessToken,
-		RefreshToken: session.RefreshToken,
+		Id:                    session.Id,
+		UserId:                userID,
+		AccessToken:           session.AccessToken,
+		RefreshToken:          session.RefreshToken,
+		AccessTokenExpiresAt:  util.FromDateTime(session.AccessTokenExpiresAt),
+		RefreshTokenExpiresAt: util.FromDateTime(session.RefreshTokenExpiresAt),
 	}, nil
 }
