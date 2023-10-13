@@ -26,7 +26,6 @@ func (a *PaymentClientAdapter) Inquiry(ctx context.Context, params dmbiller.Inqu
 		BillNumber:  params.BillNumber,
 		ProductCode: params.ProductCode,
 	})
-
 	if err != nil {
 		return dmbiller.Bill{}, err
 	}
@@ -34,6 +33,8 @@ func (a *PaymentClientAdapter) Inquiry(ctx context.Context, params dmbiller.Inqu
 	return dmbiller.Bill{
 		InquiryID:  response.InqId,
 		BillNumber: response.BillNumber,
+		BaseAmount: int64(response.DetailBill.BaseAmount),
+		FineAmount: int64(response.DetailBill.FineAmount),
 		Amount:     int64(response.TotalAmount),
 		Name:       response.Name,
 	}, nil
