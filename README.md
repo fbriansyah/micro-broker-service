@@ -130,6 +130,27 @@ Response:
     "data": <int64>
 }
 ```
+### Product
+Endpoint untuk melihat seluruh product yang terdaftar.
+
+Auth:
+- authorization: Bearer <access_token>
+
+Endpoint: `[POST] /info/products`
+
+Response:
+```json
+{
+    "error": false,
+    "message": "",
+    "data": [
+        {
+            "product_code": "P01",
+            "product_name": "Biller 1"
+        }
+    ]
+}
+```
 
 # Note
 
