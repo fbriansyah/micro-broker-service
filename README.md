@@ -50,7 +50,7 @@ Response:
 }
 ```
 
-## Payment
+## Biller
 ### Inquiry
 Endpoint untuk melihat tagihan dari `bill_number` yang dikirim.
 
