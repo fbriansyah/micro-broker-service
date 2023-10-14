@@ -4,6 +4,7 @@ import (
 	"context"
 
 	dmbiller "github.com/fbriansyah/micro-broker-service/internal/application/domain/biller"
+	dmproduct "github.com/fbriansyah/micro-broker-service/internal/application/domain/product"
 	dmsession "github.com/fbriansyah/micro-broker-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-broker-service/internal/application/domain/user"
 )
@@ -23,4 +24,6 @@ type BrokerServicePort interface {
 	GetPayloadData(ctx context.Context, token string) (dmsession.SessionPayload, error)
 	// GetBalance return user balance, if error, it will return -1
 	GetBalance(ctx context.Context, token string) (int64, error)
+	// GetListProduct return all product
+	GetListProduct(ctx context.Context) ([]dmproduct.Product, error)
 }

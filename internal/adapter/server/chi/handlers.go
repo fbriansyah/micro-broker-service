@@ -133,3 +133,18 @@ func (adapter *ChiAdapter) GetBalance(w http.ResponseWriter, r *http.Request) {
 
 	adapter.writeJSON(w, 200, payload)
 }
+
+func (adapter *ChiAdapter) GetListProduct(w http.ResponseWriter, r *http.Request) {
+	products, err := adapter.brokerService.GetListProduct(context.Background())
+	if err != nil {
+		adapter.errorJSON(w, err)
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "",
+		Data:    products,
+	}
+
+	adapter.writeJSON(w, 200, payload)
+}

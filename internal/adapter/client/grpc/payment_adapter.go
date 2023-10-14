@@ -2,8 +2,10 @@ package grpcclient
 
 import (
 	"context"
+	"io"
 
 	dmbiller "github.com/fbriansyah/micro-broker-service/internal/application/domain/biller"
+	dmproduct "github.com/fbriansyah/micro-broker-service/internal/application/domain/product"
 	"github.com/fbriansyah/micro-broker-service/internal/port"
 	"github.com/fbriansyah/micro-broker-service/util"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/payment"
@@ -67,4 +69,30 @@ func (a *PaymentClientAdapter) GetBalance(ctx context.Context, userID uuid.UUID)
 	}
 
 	return int64(resp.Balance), nil
+}
+
+func (a *PaymentClientAdapter) GetListProduct(ctx context.Context) ([]dmproduct.Product, error) {
+	products := []dmproduct.Product{}
+
+	stream, err := a.client.ListProduct(ctx, &payment.ListProductRequest{})
+	if err != nil {
+		return products, err
+	}
+
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return products, err
+		}
+
+		products = append(products, dmproduct.Product{
+			Code: res.Code,
+			Name: res.Name,
+		})
+	}
+
+	return products, nil
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	dmbiller "github.com/fbriansyah/micro-broker-service/internal/application/domain/biller"
+	dmproduct "github.com/fbriansyah/micro-broker-service/internal/application/domain/product"
 	dmsession "github.com/fbriansyah/micro-broker-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-broker-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-broker-service/internal/port"
@@ -99,4 +100,8 @@ func (s *BrokerService) GetBalance(ctx context.Context, token string) (int64, er
 	}
 
 	return s.paymentClient.GetBalance(ctx, payload.UserID)
+}
+
+func (s *BrokerService) GetListProduct(ctx context.Context) ([]dmproduct.Product, error) {
+	return s.paymentClient.GetListProduct(ctx)
 }
