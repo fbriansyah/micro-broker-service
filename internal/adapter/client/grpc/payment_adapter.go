@@ -7,6 +7,7 @@ import (
 	"github.com/fbriansyah/micro-broker-service/internal/port"
 	"github.com/fbriansyah/micro-broker-service/util"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/payment"
+	"github.com/google/uuid"
 	"google.golang.org/grpc"
 )
 
@@ -56,4 +57,14 @@ func (a *PaymentClientAdapter) Payment(ctx context.Context, params dmbiller.Paym
 		RefferenceNumber:    response.RefferenceNumber,
 		TransactionDatetime: util.FromDateTime(response.TransactionDatetime),
 	}, nil
+}
+
+// GetBalance from userid. If error, its will return -1
+func (a *PaymentClientAdapter) GetBalance(ctx context.Context, userID uuid.UUID) (int64, error) {
+	resp, err := a.client.GetBalance(ctx, &payment.GetBalanceRequest{UserId: userID.String()})
+	if err != nil {
+		return -1, err
+	}
+
+	return int64(resp.Balance), nil
 }

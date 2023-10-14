@@ -113,6 +113,24 @@ Response:
 }
 ```
 
+## Info
+### Balance
+Endpoint untuk cek user balance.
+
+Auth:
+- authorization: Bearer <access_token>
+
+Endpoint: `[POST] /info/balance`
+
+Response:
+```json
+{
+    "error": false,
+    "message": "",
+    "data": <int64>
+}
+```
+
 # Note
 
 Aplikasi ini merupakan PoC (proof of concept) atau prototype, jadi masih banyak ruang untuk pengembangan. Saya berharap ada masukan yang bisa membuat project ini menjadi lebih baik lagi.

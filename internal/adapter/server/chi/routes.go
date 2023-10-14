@@ -26,6 +26,7 @@ func (adapter *ChiAdapter) routes() http.Handler {
 	mux.Post("/auth/login", adapter.Login)
 	mux.Post("/biller/inquiry", adapter.Inquiry)
 	mux.Post("/biller/payment", adapter.Payment)
+	mux.Get("/info/balance", adapter.GetBalance)
 
 	return mux
 }

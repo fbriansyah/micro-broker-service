@@ -6,6 +6,7 @@ import (
 	dmbiller "github.com/fbriansyah/micro-broker-service/internal/application/domain/biller"
 	dmsession "github.com/fbriansyah/micro-broker-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-broker-service/internal/application/domain/user"
+	"github.com/google/uuid"
 )
 
 // AuthAdapterPort is interface for client adapter
@@ -24,4 +25,5 @@ type SessionAdapterPort interface {
 type PaymentAdapterPort interface {
 	Inquiry(ctx context.Context, params dmbiller.InquiryParam) (dmbiller.Bill, error)
 	Payment(ctx context.Context, params dmbiller.PaymentParam) (dmbiller.Transaction, error)
+	GetBalance(ctx context.Context, userID uuid.UUID) (int64, error)
 }

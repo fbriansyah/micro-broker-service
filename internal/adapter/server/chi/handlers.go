@@ -20,7 +20,6 @@ func (adapter *ChiAdapter) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	usr, session, err := adapter.brokerService.Login(context.Background(), req.Username, req.Password)
-
 	if err != nil {
 		adapter.errorJSON(w, err)
 		return
@@ -102,6 +101,35 @@ func (adapter *ChiAdapter) Payment(w http.ResponseWriter, r *http.Request) {
 		Message: "",
 		Data:    trx,
 	}
+
+	adapter.writeJSON(w, 200, payload)
+}
+
+func (adapter *ChiAdapter) GetBalance(w http.ResponseWriter, r *http.Request) {
+	authHeader := strings.Split(r.Header.Get("authorization"), " ")
+	if len(authHeader) != 2 {
+		adapter.errorJSON(w, errors.New("authorization header not found"), http.StatusUnauthorized)
+		return
+	}
+	token := authHeader[1]
+
+	balance, err := adapter.brokerService.GetBalance(context.Background(), token)
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "",
+		Data:    -1,
+	}
+
+	if err != nil {
+		payload.Error = true
+		payload.Message = err.Error()
+
+		adapter.writeJSON(w, 500, payload)
+		return
+	}
+
+	payload.Data = balance
 
 	adapter.writeJSON(w, 200, payload)
 }

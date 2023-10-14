@@ -10,9 +10,7 @@ import (
 	"github.com/fbriansyah/micro-broker-service/internal/port"
 )
 
-var (
-	ErrorInvalidToken = errors.New("invalid token")
-)
+var ErrorInvalidToken = errors.New("invalid token")
 
 type BrokerService struct {
 	authClient    port.AuthAdapterPort
@@ -53,7 +51,6 @@ func (s *BrokerService) Register(ctx context.Context, user dmuser.User, password
 }
 
 func (s *BrokerService) Inquiry(ctx context.Context, billNumber, productCode, token string) (dmbiller.Bill, error) {
-
 	payload, err := s.sessionClient.GetPayloadData(ctx, token)
 	if err != nil {
 		return dmbiller.Bill{}, ErrorInvalidToken
@@ -93,4 +90,13 @@ func (s *BrokerService) Payment(ctx context.Context, amount int64, inqID, token 
 
 func (s *BrokerService) GetPayloadData(ctx context.Context, token string) (dmsession.SessionPayload, error) {
 	return s.sessionClient.GetPayloadData(ctx, token)
+}
+
+func (s *BrokerService) GetBalance(ctx context.Context, token string) (int64, error) {
+	payload, err := s.GetPayloadData(ctx, token)
+	if err != nil {
+		return -1, err
+	}
+
+	return s.paymentClient.GetBalance(ctx, payload.UserID)
 }
